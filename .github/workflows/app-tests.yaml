@@ -53,6 +53,7 @@ jobs:
         - name: Install dependencies
           run: |
             python -m pip install -r requirements-dev.txt
+            playwright install chromium --with-deps
         - name: Install app as editable app
           run: |
             python -m pip install -e src/backend
@@ -76,10 +77,7 @@ jobs:
           run: python3 -m pytest -s -vv --cov --cov-fail-under=85
         - name: Run E2E tests with Playwright
           id: e2e
-          if: runner.os != 'Windows'
-          run: |
-            playwright install chromium --with-deps
-            python3 -m pytest tests/e2e.py --tracing=retain-on-failure
+          run: python3 -m pytest tests/e2e.py --tracing=retain-on-failure
         - name: Upload test artifacts
           if: ${{ failure() && steps.e2e.conclusion == 'failure' }}
           uses: actions/upload-artifact@v4
