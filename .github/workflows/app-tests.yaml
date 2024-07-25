@@ -42,6 +42,7 @@ jobs:
             npm install
             npm run build
         - name: Run E2E tests on Windows with Playwright
+          shell: bash
           run: |
             export PLAYWRIGHT_BROWSERS_PATH="$HOME\AppData\Local\ms-playwright"
             playwright install chromium --with-deps
