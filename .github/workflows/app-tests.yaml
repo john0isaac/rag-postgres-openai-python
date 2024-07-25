@@ -78,15 +78,17 @@ jobs:
           id: e2e
           if: runner.os != 'Windows'
           run: |
+            echo "PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright-bin" >> $GITHUB_ENV
             playwright install chromium --with-deps
             python3 -m pytest tests/e2e.py --tracing=retain-on-failure
         - name: Run E2E tests on Windows with Playwright
           if: runner.os == 'Windows'
           run: |
+            echo "PLAYWRIGHT_BROWSERS_PATH=$HOME\.cache\playwright-bin" >> $GITHUB_ENV
             playwright install chromium --with-deps
-            python3 -m pytest tests/e2e.py
+            python3 -m pytest tests/e2e.py --tracing=retain-on-failure
         - name: Upload test artifacts
-          if: ${{ failure() && steps.e2e.conclusion == 'failure' && runner.os != 'Windows' }}
+          if: ${{ failure() && steps.e2e.conclusion == 'failure' }}
           uses: actions/upload-artifact@v4
           with:
             name: playwright-traces${{ matrix.python_version }}
